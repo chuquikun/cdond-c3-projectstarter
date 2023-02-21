@@ -1,36 +1,39 @@
 version: 2.1
 
-commands:
-  destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    parameters:
-      # Add parameter here   
-    steps:
-      - run:
-          name: Destroy environments
-          when: on_fail
-          command: |
-            # Your code here
-            exit 1
+orbs:
+  slack: circleci/slack@4.12.1
 
-  revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      # Add parameter here     
-    steps:
-      - run:
-          name: Revert migrations
-          # Add when this will run
-          command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
-            then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
-            fi
+#commands:
+#  destroy-environment:
+#    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+#    parameters:
+#      # Add parameter here   
+#    steps:
+#      - run:
+#          name: Destroy environments
+#          when: on_fail
+#          command: |
+#            # Your code here
+#            exit 1
+#
+#  revert-migrations:
+#    description: Revert the last migration if successfully run in the current workflow.
+#    parameters:
+#      # Add parameter here     
+#    steps:
+#      - run:
+#          name: Revert migrations
+#          # Add when this will run
+#          command: |
+#            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+#            SUCCESS = 1
+#            if(( $SUCCESS==1 )); 
+#            then
+#            #  cd ~/project/backend
+#            #  npm install
+#            #  Add revert code here. You can find this in the Getting Started section.
+#              exit 1
+#            fi
             
 jobs:
   build-frontend:
@@ -49,6 +52,9 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   build-backend:
     docker:
@@ -66,11 +72,13 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
-
     steps:
       - checkout
       - restore_cache:
@@ -81,6 +89,9 @@ jobs:
             cd frontend
             npm install
             npm run test
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
                 
   test-backend:
     docker:
@@ -95,6 +106,9 @@ jobs:
             cd backend
             npm install
             npm run test
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
             
   scan-frontend:
     docker:
@@ -111,6 +125,9 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   scan-backend:
     docker:
@@ -127,6 +144,9 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 #
 #  deploy-infrastructure:
