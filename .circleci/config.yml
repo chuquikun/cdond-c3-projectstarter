@@ -71,6 +71,7 @@ jobs:
     docker:
       circleci/node:13.8.0
     steps:
+      - checkout
       - run:
           name: front-end test
           command: |
@@ -82,6 +83,7 @@ jobs:
     docker:
       circleci/node:13.8.0
     steps:
+      - checkout
       - run:
           name: back-end test
           command: |
