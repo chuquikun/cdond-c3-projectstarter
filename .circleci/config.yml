@@ -319,9 +319,9 @@ workflows:
   default:
     jobs:
       - build-frontend:
-        context: udapeople
+          context: udapeople
       - build-backend:
-        context: udapeople
+          context: udapeople
       - test-frontend:
           context: udapeople
           requires: [build-frontend]
@@ -353,3 +353,18 @@ workflows:
       #    requires: [smoke-test]
       #- cleanup:
       #    requires: [cloudfront-update]
+
+jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+    - slack/notify:
+        event: fail
+        template: basic_fail_1
+    - slack/notify:
+        event: pass
+        template: success_tagged_deploy_1
