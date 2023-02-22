@@ -318,16 +318,28 @@ cleanup:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
+      - build-frontend:
+        context:
+         - udapeople
+      - build-backend:
+        context:
+         - udapeople
       - test-frontend:
-          requires: [build-frontend]
+        context:
+         - udapeople
+        requires: [build-frontend]
       - test-backend:
-          requires: [build-backend]
+        context:
+         - udapeople
+        requires: [build-backend]
       - scan-backend:
-          requires: [build-backend]
+        context:
+         - udapeople
+        requires: [build-backend]
       - scan-frontend:
-          requires: [build-frontend]
+        context:
+         - udapeople
+        requires: [build-frontend]
       #- deploy-infrastructure:
       #    requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #    filters:
