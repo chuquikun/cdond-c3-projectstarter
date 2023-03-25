@@ -213,7 +213,7 @@ jobs:
 
   run-migrations:
     docker:
-      circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -237,7 +237,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      circleci/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - attach_workspace:
