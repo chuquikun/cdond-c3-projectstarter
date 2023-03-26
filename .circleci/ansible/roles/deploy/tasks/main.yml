@@ -5,6 +5,8 @@
     copy:
       src: /root/project/artifact.tar.gz
       dest: /home/ubuntu/artifact.tar.gz
+  - name: "Extract files"
+    become: true
     shell : |
         cd /home/ubuntu/
         tar xvzf artifact.tar.gz -C .
