@@ -37,7 +37,7 @@ commands:
             echo "****************"
             if(( $SUCCESS==1 )); 
             then
-              cd backend
+              cd ~/project/backend
               npm install
               npm migrations:revert
             else
@@ -242,7 +242,7 @@ jobs:
       - run:
           name: Send migration results to kvdb
           command: |
-            if grep -q "has been executed successfully." ~/project/backend/backend/migrations_dump.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl https://kvdb.io/PuE763VUKSF4tJPERQMR2T/migration_${CIRCLE_WORKFLOW_ID:0:7} -k -d '1'
             else
@@ -338,13 +338,15 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            echo "${API_URL}"
-              if curl "${API_URL}/api/status" | grep "ok"
-              then
-                return 0
-              else
-                return 1
-              fi
+            echo "****************"
+            echo ${API_URL}
+            echo "****************"
+            if curl "${API_URL}/api/status" | grep "ok"
+            then
+              return 0
+            else
+              return 1
+            fi
 
       - run:
           name: Frontend smoke test.
