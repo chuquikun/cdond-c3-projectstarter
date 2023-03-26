@@ -349,7 +349,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
       - run:
           name: Install dependencies
           command: |
@@ -374,13 +373,13 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
             yum install -y tar gzip
             yum install -y nodejs curl
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get old stack workflow id
           command: |
