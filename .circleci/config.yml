@@ -35,13 +35,11 @@ commands:
             echo << parameters.WORKFLOW_ID >>
             echo $SUCCESS
             echo "****************"
-            if(( $SUCCESS==1 )); 
+            if [[ $SUCCESS -eq 1 ]] ;
             then
               cd ~/project/backend
               npm install
               npm migrations:revert
-            else
-              exit 1
             fi
             
 jobs:
