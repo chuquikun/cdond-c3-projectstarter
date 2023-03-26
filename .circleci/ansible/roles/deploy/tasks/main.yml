@@ -1,6 +1,6 @@
 ---
 
-  - name: Copy files
+  - name: "Copy files"
     become: true
     copy:
       src: /root/project/artifact.tar.gz
@@ -8,7 +8,7 @@
     shell : |
         cd /home/ubuntu/
         tar xvzf artifact.tar.gz -C .
-  - name: Start app
+  - name: "Start app"
     become: true
     shell : |
         cd /home/ubuntu/
