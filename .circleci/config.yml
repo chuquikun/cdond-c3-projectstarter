@@ -31,10 +31,6 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/PuE763VUKSF4tJPERQMR2T/migration_<< parameters.WORKFLOW_ID >>)
-            echo "****************"
-            echo << parameters.WORKFLOW_ID >>
-            echo $SUCCESS
-            echo "****************"
             if [[ $SUCCESS -eq 1 ]] ;
             then
               cd ~/project/backend
@@ -233,12 +229,6 @@ jobs:
       - run:
           name: Send migration results to kvdb
           command: |
-            echo "****************"
-            cat ~/project/backend/migrations_dump.txt
-            echo "****************"
-            echo "****************"
-            cat backend/migrations_dump.txt
-            echo "****************"
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl https://kvdb.io/PuE763VUKSF4tJPERQMR2T/migration_${CIRCLE_WORKFLOW_ID:0:7} -k -d '1'
@@ -326,18 +316,11 @@ jobs:
           command: |
             export BACKEND_IP=$(sed -n 2p ~/project/.circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "****************"
-            echo $BACKEND_IP
-            echo $API_URL
-            echo "****************"
       - run:
           name: Backend smoke test.
           command: |
             export BACKEND_IP=$(sed -n 2p ~/project/.circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "****************"
-            echo "${API_URL}"
-            echo "****************"
             if curl "${API_URL}/api/status" | grep "ok"
             then
               return 0
