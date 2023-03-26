@@ -15,7 +15,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            aws s3 rm "s3://udapeople-<< parameters.WORKFLOW_ID >>" --recursive
+            aws s3 rm "s3://udapeople-<< parameters.WORKFLOW_ID/ >>" --recursive
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.WORKFLOW_ID >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.WORKFLOW_ID >>
 
@@ -394,9 +394,11 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
+            echo Stack names: "${STACKS[@]}"
+            echo Stack names: "${OldWorkflowID}" 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws s3 rm "s3://udapeople-${OldWorkflowID}/" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
             fi
