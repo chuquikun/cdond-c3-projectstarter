@@ -219,16 +219,6 @@ jobs:
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
-        environment:
-          TYPEORM_CONNECTION: $TYPEORM_CONNECTION
-          TYPEORM_ENTITIES: $TYPEORM_ENTITIES  
-          TYPEORM_HOST: $TYPEORM_HOST
-          TYPEORM_PORT: $TYPEORM_PORT
-          TYPEORM_USERNAME: $TYPEORM_USERNAME
-          TYPEORM_PASSWORD: $TYPEORM_PASSWORD
-          TYPEORM_DATABASE: $TYPEORM_DATABASE
-          TYPEORM_MIGRATIONS: $TYPEORM_MIGRATIONS
-          TYPEORM_MIGRATIONS_DIR: $TYPEORM_MIGRATIONS_DIR
     steps:
       - checkout
       - restore_cache:
@@ -245,8 +235,6 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl https://kvdb.io/PuE763VUKSF4tJPERQMR2T/migration_${CIRCLE_WORKFLOW_ID:0:7} -k -d '1'
-            else
-              curl https://kvdb.io/PuE763VUKSF4tJPERQMR2T/migration_${CIRCLE_WORKFLOW_ID:0:7} -k -d '0' 
             fi
      # Here's where you will add some code to rollback on failure
       - destroy-environment
