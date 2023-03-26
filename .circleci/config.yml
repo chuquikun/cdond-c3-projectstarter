@@ -331,6 +331,10 @@ jobs:
           command: |
             export BACKEND_IP=$(sed -n 2p ~/project/.circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
+            echo "****************"
+            echo $BACKEND_IP
+            echo $API_URL
+            echo "****************"
       - run:
           name: Backend smoke test.
           command: |
@@ -355,7 +359,9 @@ jobs:
             else
               return 1
             fi
-      # Here's where you will add some code to rollback on failure  
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
+      - revert-migrations    
 #
 #  cloudfront-update:
 #    docker:
