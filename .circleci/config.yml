@@ -353,7 +353,7 @@ jobs:
           name: Install dependencies
           command: |
             yum install -y tar gzip
-            yum install -y nodejs curl
+            yum install -y nodejs npm curl
       - attach_workspace:
           at: ~/
       - run:
